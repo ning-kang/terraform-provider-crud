@@ -3,8 +3,8 @@ package main
 import (
 	"context"
 
-	"github.com/hashicorp/terraform-crud-provider/internal/crud"
 	"github.com/hashicorp/terraform-plugin-framework/providerserver"
+	"github.com/ning-kang/terraform-crud-provider/internal/crud"
 )
 
 // Run "go generate" to format example terraform files and generate the docs for the registry/website
