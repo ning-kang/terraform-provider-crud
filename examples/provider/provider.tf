@@ -1,11 +1,15 @@
 terraform {
   required_providers {
     crud = {
-      source = "crud.com/crud/unicorns"
+      source = "crud.com/crud/crud"
     }
   }
 }
 
 provider "crud" {
    endpoint = "https://crudcrud.com/api/b93947cfec7840c9aba7f57e2bae87e8/unicorns"
+}
+
+data "crud_unicorns" "first" {
+  
 }

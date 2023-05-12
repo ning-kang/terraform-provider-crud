@@ -1,4 +1,4 @@
-module terraform-crud-provider
+module terraform-provider-crud
 
 go 1.19
 

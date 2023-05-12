@@ -2,7 +2,7 @@ package main
 
 import (
 	"context"
-	"terraform-crud-provider/internal/crud"
+	"terraform-provider-crud/internal/crud"
 
 	"github.com/hashicorp/terraform-plugin-framework/providerserver"
 )
@@ -33,6 +33,6 @@ func main() {
 		// provider address is used in these tutorials in conjunction with a
 		// specific Terraform CLI configuration for manual development testing
 		// of this provider.
-		Address: "crud.com/crud/unicorns",
+		Address: "crudcrud.com/api/b93947cfec7840c9aba7f57e2bae87e8",
 	})
 }
