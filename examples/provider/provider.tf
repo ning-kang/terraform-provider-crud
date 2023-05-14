@@ -7,9 +7,13 @@ terraform {
 }
 
 provider "crud" {
-   endpoint = "https://crudcrud.com/api/b93947cfec7840c9aba7f57e2bae87e8/unicorns"
+   endpoint = "https://crudcrud.com/api/de7cbd95b4c9466cbbbf73a407f5afc3"
 }
 
 data "crud_unicorns" "first" {
   
+}
+
+output "crud_unicorns" {
+  value = data.crud_unicorns.first
 }

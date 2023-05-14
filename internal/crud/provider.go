@@ -2,8 +2,8 @@ package crud
 
 import (
 	"context"
+	"terraform-provider-crud/client"
 
-	"github.com/dghubble/sling"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/provider"
@@ -68,20 +68,31 @@ func (p *CrudProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 		return
 	}
 
-	if data.Endpoint.IsNull() {
+	host := data.Endpoint.ValueString()
+
+	if host == "" {
 		resp.Diagnostics.AddAttributeError(
-			path.Root("endpoint"),
-			"Missing Crud API endpoint",
+			path.Root("host"),
+			"Missing CRUD API Host",
 			"",
 		)
 	}
-
 	if resp.Diagnostics.HasError() {
 		return
 	}
 
 	// Example client configuration for data sources and resources
-	client := sling.New().Base(data.Endpoint.ValueString())
+	client, err := client.NewClient(&host)
+	if err != nil {
+		resp.Diagnostics.AddError(
+			"Unable to Create CRUD API Client",
+			"An unexpected error occurred when creating the Crud API client. "+
+				"If the error is not clear, please contact the provider developers.\n\n"+
+				"Crud Client Error: "+err.Error(),
+		)
+		return
+	}
+
 	resp.DataSourceData = client
 	resp.ResourceData = client
 }
@@ -92,7 +103,7 @@ func (p *CrudProvider) Resources(ctx context.Context) []func() resource.Resource
 
 func (p *CrudProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
 	return []func() datasource.DataSource{
-		UnicornsDataSource,
+		NewunicornsDataSource,
 	}
 }
 
