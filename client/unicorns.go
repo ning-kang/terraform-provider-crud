@@ -3,6 +3,7 @@ package client
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 )
@@ -72,4 +73,47 @@ func (c *Client) CreateUnicorn(unicornItem *UnicornItem) (*Unicorn, error) {
 	}
 
 	return &unicorn, nil
+}
+
+func (c *Client) UpdateUnicorn(unicornID string, unicornItem *UnicornItem) (*Unicorn, error) {
+	rb, err := json.Marshal(unicornItem)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("PUT", fmt.Sprintf("%s/unicorns/%s", c.HostURL, unicornID), bytes.NewReader(rb))
+	if err != nil {
+		return nil, err
+	}
+
+	body, err := c.doRequest(req)
+	if err != nil {
+		return nil, err
+	}
+
+	unicorn := Unicorn{}
+	err = json.Unmarshal(body, &unicorn)
+	if err != nil {
+		return nil, err
+	}
+
+	return &unicorn, nil
+}
+
+func (c *Client) DeleteUnicorn(unicornID string) error {
+	req, err := http.NewRequest("DELETE", fmt.Sprintf("%s/unicorns/%s", c.HostURL, unicornID), nil)
+	if err != nil {
+		return err
+	}
+
+	body, err := c.doRequest(req)
+	if err != nil {
+		return err
+	}
+
+	if string(body) != "Deleted unicorn" {
+		return errors.New(string(body))
+	}
+
+	return nil
 }
