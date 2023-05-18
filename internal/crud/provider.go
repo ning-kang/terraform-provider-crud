@@ -98,7 +98,9 @@ func (p *CrudProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 }
 
 func (p *CrudProvider) Resources(ctx context.Context) []func() resource.Resource {
-	return []func() resource.Resource{}
+	return []func() resource.Resource{
+		NewUnicornResource,
+	}
 }
 
 func (p *CrudProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
