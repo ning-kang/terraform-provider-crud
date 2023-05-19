@@ -2,6 +2,8 @@ package main
 
 import (
 	"context"
+	"flag"
+	"log"
 	"terraform-provider-crud/internal/crud"
 
 	"github.com/hashicorp/terraform-plugin-framework/providerserver"
@@ -27,12 +29,20 @@ var (
 )
 
 func main() {
-	providerserver.Serve(context.Background(), crud.New(version), providerserver.ServeOpts{
-		// NOTE: This is not a typical Terraform Registry provider address,
-		// such as registry.terraform.io/hashicorp/hashicups. This specific
-		// provider address is used in these tutorials in conjunction with a
-		// specific Terraform CLI configuration for manual development testing
-		// of this provider.
-		Address: "crudcrud.com/api/b93947cfec7840c9aba7f57e2bae87e8",
-	})
+	var debug bool
+
+	flag.BoolVar(&debug, "debug", false, "set to true to run the provider with support for debuggers like delve")
+	flag.Parse()
+
+	opts := providerserver.ServeOpts{
+		// TODO: Update this string with the published name of your provider.
+		Address: "registry.terraform.io/ningkang/crud",
+		Debug:   debug,
+	}
+
+	err := providerserver.Serve(context.Background(), crud.New(version), opts)
+
+	if err != nil {
+		log.Fatal(err.Error())
+	}
 }
