@@ -3,7 +3,6 @@ package client
 import (
 	"bytes"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"net/http"
 )
@@ -86,18 +85,14 @@ func (c *Client) UpdateUnicorn(unicornID string, unicornItem *UnicornItem) (*Uni
 		return nil, err
 	}
 
-	body, err := c.doRequest(req)
+	req.Header.Set("Content-Type", "application/json")
+
+	_, err = c.doRequest(req)
 	if err != nil {
 		return nil, err
 	}
 
-	unicorn := Unicorn{}
-	err = json.Unmarshal(body, &unicorn)
-	if err != nil {
-		return nil, err
-	}
-
-	return &unicorn, nil
+	return nil, nil
 }
 
 func (c *Client) DeleteUnicorn(unicornID string) error {
@@ -106,13 +101,9 @@ func (c *Client) DeleteUnicorn(unicornID string) error {
 		return err
 	}
 
-	body, err := c.doRequest(req)
+	_, err = c.doRequest(req)
 	if err != nil {
 		return err
-	}
-
-	if string(body) != "Deleted unicorn" {
-		return errors.New(string(body))
 	}
 
 	return nil

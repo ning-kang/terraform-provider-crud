@@ -12,7 +12,7 @@ provider "crud" {
 
 resource "crud_unicorn" "second" {
   name = "second"
-  age = 7
+  age = 5
   colour = "green"
 }
 

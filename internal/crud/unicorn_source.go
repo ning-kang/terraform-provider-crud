@@ -2,8 +2,8 @@ package crud
 
 import (
 	"context"
+	"encoding/json"
 	"terraform-provider-crud/client"
-	"time"
 
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
@@ -103,6 +103,7 @@ func (r *unicornResource) Create(ctx context.Context, req resource.CreateRequest
 
 	// Map response body to schema and populate Computed attribute values
 	plan = unicornResourceModel{
+		ID:     types.StringValue(unicorn.ID),
 		Name:   types.StringValue(unicorn.Name),
 		Age:    types.Int64Value(int64(unicorn.Age)),
 		Colour: types.StringValue(unicorn.Colour),
@@ -169,43 +170,35 @@ func (r *unicornResource) Update(ctx context.Context, req resource.UpdateRequest
 		Colour: plan.Colour.ValueString(),
 	}
 
-	// Update existing order
-	_, err := r.client.UpdateOrder(plan.ID.ValueString(), hashicupsItems)
+	// Update existing unicorn
+	_, err := r.client.UpdateUnicorn(plan.ID.ValueString(), &item)
+	str, _ := json.Marshal(&item)
 	if err != nil {
 		resp.Diagnostics.AddError(
-			"Error Updating HashiCups Order",
-			"Could not update order, unexpected error: "+err.Error(),
+			"Error Updating Crud unicorn",
+			"Could not update unicorn, unexpected error: "+err.Error()+string(str),
 		)
 		return
 	}
 
-	// Fetch updated items from GetOrder as UpdateOrder items are not
+	// Fetch updated items from GetUnicorn as UpdateUnicorn items are not
 	// populated.
-	order, err := r.client.GetOrder(plan.ID.ValueString())
+	unicorn, err := r.client.GetUnicorn(plan.ID.ValueString())
 	if err != nil {
 		resp.Diagnostics.AddError(
-			"Error Reading HashiCups Order",
-			"Could not read HashiCups order ID "+plan.ID.ValueString()+": "+err.Error(),
+			"Error Reading Crud unicorn",
+			"Could not read Crud unicorn ID "+plan.ID.ValueString()+": "+err.Error(),
 		)
 		return
 	}
 
 	// Update resource state with updated items and timestamp
-	plan.Items = []orderItemModel{}
-	for _, item := range order.Items {
-		plan.Items = append(plan.Items, orderItemModel{
-			Coffee: orderItemCoffeeModel{
-				ID:          types.Int64Value(int64(item.Coffee.ID)),
-				Name:        types.StringValue(item.Coffee.Name),
-				Teaser:      types.StringValue(item.Coffee.Teaser),
-				Description: types.StringValue(item.Coffee.Description),
-				Price:       types.Float64Value(item.Coffee.Price),
-				Image:       types.StringValue(item.Coffee.Image),
-			},
-			Quantity: types.Int64Value(int64(item.Quantity)),
-		})
+	plan = unicornResourceModel{
+		ID:     types.StringValue(plan.ID.ValueString()),
+		Name:   types.StringValue(unicorn.Name),
+		Age:    types.Int64Value(int64(unicorn.Age)),
+		Colour: types.StringValue(unicorn.Colour),
 	}
-	plan.LastUpdated = types.StringValue(time.Now().Format(time.RFC850))
 
 	diags = resp.State.Set(ctx, plan)
 	resp.Diagnostics.Append(diags...)
@@ -216,4 +209,21 @@ func (r *unicornResource) Update(ctx context.Context, req resource.UpdateRequest
 
 // Delete deletes the resource and removes the Terraform state on success.
 func (r *unicornResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	// Retrieve values from state
+	var state unicornResourceModel
+	diags := req.State.Get(ctx, &state)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	// Delete existing order
+	err := r.client.DeleteUnicorn(state.ID.ValueString())
+	if err != nil {
+		resp.Diagnostics.AddError(
+			"Error Deleting Crud unicorn",
+			"Could not delete unicorn, unexpected error: "+err.Error(),
+		)
+		return
+	}
 }
