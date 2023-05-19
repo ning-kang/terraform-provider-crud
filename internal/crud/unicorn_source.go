@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"terraform-provider-crud/client"
 
+	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
@@ -21,8 +22,9 @@ type unicornResourceModel struct {
 
 // Ensure the implementation satisfies the expected interfaces.
 var (
-	_ resource.Resource              = &unicornResource{}
-	_ resource.ResourceWithConfigure = &unicornResource{}
+	_ resource.Resource                = &unicornResource{}
+	_ resource.ResourceWithConfigure   = &unicornResource{}
+	_ resource.ResourceWithImportState = &unicornResource{}
 )
 
 // NewunicornResource is a helper function to simplify the provider implementation.
@@ -226,4 +228,9 @@ func (r *unicornResource) Delete(ctx context.Context, req resource.DeleteRequest
 		)
 		return
 	}
+}
+
+func (r *unicornResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+	// Retrieve import ID and save to id attribute
+	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 }
