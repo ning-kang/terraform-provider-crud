@@ -7,12 +7,12 @@ terraform {
 }
 
 provider "crud" {
-   endpoint = "https://crudcrud.com/api/d91f56d5de624701a2c1e3ecbc8cc29a"
+  endpoint = "https://crudcrud.com/api/d91f56d5de624701a2c1e3ecbc8cc29a"
 }
 
 resource "crud_unicorn" "second" {
-  name = "second"
-  age = 5
+  name   = "second"
+  age    = 5
   colour = "green"
 }
 
