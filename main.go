@@ -22,7 +22,7 @@ import (
 var (
 	// these will be set by the goreleaser configuration
 	// to appropriate values for the compiled binary.
-	version string = "sdev"
+	version string = "0.1.2"
 
 	// goreleaser can pass other information to the main package, such as the specific commit
 	// https://goreleaser.com/cookbooks/using-main.version/
@@ -36,7 +36,7 @@ func main() {
 
 	opts := providerserver.ServeOpts{
 		// TODO: Update this string with the published name of your provider.
-		Address: "registry.terraform.io/ningkang/crud",
+		Address: "registry.terraform.io/ning-kang/crud",
 		Debug:   debug,
 	}
 
