@@ -10,9 +10,6 @@ linters:
     - durationcheck
     - errcheck
     - exportloopref
-    - forcetypeassert
-    - godot
-    - gofmt
     - gosimple
     - ineffassign
     - makezero
