@@ -29,6 +29,16 @@ jobs:
           cache: true
       - run: go mod download
       - run: go build -v .
+
+  golangci:
+    name: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-go@v4
+        with:
+          go-version-file: 'go.mod'
+          cache: true
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v3
         with:
