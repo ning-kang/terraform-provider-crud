@@ -11,6 +11,7 @@ import (
 
 type unicornsDataSourceModel struct {
 	Unicorns []unicornsModel `tfsdk:"unicorns"`
+	ID       types.String    `tfsdk:"id"`
 }
 
 // coffeesModel maps coffees schema data.
@@ -50,6 +51,9 @@ func (d *unicornsDataSource) Metadata(_ context.Context, req datasource.Metadata
 func (d *unicornsDataSource) Schema(_ context.Context, _ datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		Attributes: map[string]schema.Attribute{
+			"id": schema.StringAttribute{
+				Computed: true,
+			},
 			"unicorns": schema.ListNestedAttribute{
 				Computed: true,
 				NestedObject: schema.NestedAttributeObject{
@@ -97,6 +101,8 @@ func (d *unicornsDataSource) Read(ctx context.Context, req datasource.ReadReques
 
 		state.Unicorns = append(state.Unicorns, unicornState)
 	}
+
+	state.ID = types.StringValue("placeholder")
 
 	// Set state
 	diags := resp.State.Set(ctx, &state)
