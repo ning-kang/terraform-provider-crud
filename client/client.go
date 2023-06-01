@@ -7,8 +7,6 @@ import (
 	"time"
 )
 
-const HostURL string = "https://crudcrud.com/api/de7cbd95b4c9466cbbbf73a407f5afc3"
-
 // Client -
 type Client struct {
 	HostURL    string
@@ -18,11 +16,7 @@ type Client struct {
 func NewClient(host *string) (*Client, error) {
 	c := Client{
 		HTTPClient: &http.Client{Timeout: 10 * time.Second},
-		HostURL:    HostURL,
-	}
-
-	if host != nil {
-		c.HostURL = *host
+		HostURL:    *host,
 	}
 
 	return &c, nil
