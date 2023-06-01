@@ -28,6 +28,14 @@ type CrudProviderModel struct {
 	Endpoint types.String `tfsdk:"endpoint"`
 }
 
+func New(version string) func() provider.Provider {
+	return func() provider.Provider {
+		return &CrudProvider{
+			version: version,
+		}
+	}
+}
+
 func (p *CrudProvider) Metadata(ctx context.Context, req provider.MetadataRequest, resp *provider.MetadataResponse) {
 	resp.TypeName = "crud"
 	resp.Version = p.version
@@ -107,13 +115,5 @@ func (p *CrudProvider) DataSources(ctx context.Context) []func() datasource.Data
 	return []func() datasource.DataSource{
 		NewunicornsDataSource,
 		NewUnicornDataSource,
-	}
-}
-
-func New(version string) func() provider.Provider {
-	return func() provider.Provider {
-		return &CrudProvider{
-			version: version,
-		}
 	}
 }

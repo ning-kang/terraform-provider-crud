@@ -23,6 +23,6 @@ var (
 	// CLI command executed to create a provider server to which the CLI can
 	// reattach.
 	testAccProtoV6ProviderFactories = map[string]func() (tfprotov6.ProviderServer, error){
-		"crud": providerserver.NewProtocol6WithError(New()),
+		"crud": providerserver.NewProtocol6WithError(New("test")()),
 	}
 )
