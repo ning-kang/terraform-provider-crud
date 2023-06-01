@@ -40,7 +40,7 @@ resource "crud_unicorn" "test" {
 			{
 				Config: providerConfig + `
 resource "crud_unicorn" "test" {
-  id = "
+  id = "6477f4f6456f2b03e80b9bbf"
   name = "world"
   age = 2
   colour = "green"

@@ -12,7 +12,7 @@ const (
 	// such as updating the Makefile and running the testing through that tool.
 	providerConfig = `
 provider "crud" {
-	endpoint = "https://crudcrud.com/api/de7cbd95b4c9466cbbbf73a407f5afc3"
+	endpoint = "https://crudcrud.com/api/90482be83aab4e8ba4d773ac97a1ba01"
 }
 `
 )
