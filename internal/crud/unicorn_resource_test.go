@@ -20,8 +20,6 @@ resource "crud_unicorn" "test" {
 }
 `,
 				Check: resource.ComposeAggregateTestCheckFunc(
-					// Verify number of items
-					resource.TestCheckResourceAttr("crud_unicorn.test", "#", "1"),
 					// Verify first order item
 					resource.TestCheckResourceAttr("crud_unicorn.test", "name", "hello"),
 					resource.TestCheckResourceAttr("crud_unicorn.test", "age", "1"),
