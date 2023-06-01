@@ -22,6 +22,7 @@ data "crud_unicorns" "all" {
 
 ### Read-Only
 
+- `id` (String) The ID of this resource.
 - `unicorns` (Attributes List) (see [below for nested schema](#nestedatt--unicorns))
 
 <a id="nestedatt--unicorns"></a>
